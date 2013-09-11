@@ -1,0 +1,61 @@
+#!/bin/bash
+help_text () {
+	echo "Usage: remotediff file host1 host2"
+	exit 0
+}
+
+all_arguments_present () {
+	local arg_number=$1
+	declare -a args=("${!2}")
+	local args_given=${#args[@]}
+
+	if [ $arg_number == $args_given ]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+shortname () {
+	local name=$1
+	local shortname=$(echo $name | cut -f2 -d "@" | cut -f1 -d ".")
+
+	echo $shortname
+}
+
+shortfile () {
+	local file=$1
+	local shortfile=${file##*/}
+
+	echo $shortfile
+}
+
+remote () {
+	local file=$1
+	local remote=$2
+
+	ssh $remote cat $file > "/tmp/$$-$(shortname $remote)-$(shortfile $file)"
+	return $?
+}
+
+main () {
+	arguments=($@)
+	
+	if [[ $1 == "-h" ]] || ! all_arguments_present 3 arguments[@]
+	then
+		help_text
+	fi
+
+	local diff_file=${arguments[0]}
+	local remote_one=${arguments[1]}
+	local remote_two=${arguments[2]}
+
+	if remote $diff_file $remote_one && remote $diff_file $remote_two; then
+		diff "/tmp/$$-$(shortname $remote_one)-$(shortfile $diff_file)" "/tmp/$$-$(shortname $remote_two)-$(shortfile $diff_file)"
+		return $?
+	else
+		return 1
+	fi
+}
+
+main $1 $2 $3
