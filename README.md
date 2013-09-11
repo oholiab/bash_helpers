@@ -7,7 +7,9 @@ Contents
 --------
 So far this is all I have:
 
-1.	Remote diff
-			Usage: remotediff file host1 host2
-		Written in bash, this uses ssh to grab a copy of the file from both host1
-		and host2 and diff them
+*	Remote diff
+	
+		Usage: remotediff file host1 host2
+
+	Written in bash, this uses ssh to grab a copy of the file from both host1
+	and host2 and diff them
