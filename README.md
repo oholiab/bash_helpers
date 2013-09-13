@@ -13,3 +13,13 @@ So far this is all I have:
 
 	Written in bash, this uses ssh to grab a copy of the file from both host1
 	and host2 and diff them
+
+* Dpkg Diff Uniques
+
+		Usage: dpkgdiffuniques [file] (or can be piped to)
+
+	Written in ruby, this will parse a diff of the output of dpkg -l from two
+	machines and tell you which packages are unique to which boxes, ignoring
+	versioning.
+
+	You have to do the diff yourself first.

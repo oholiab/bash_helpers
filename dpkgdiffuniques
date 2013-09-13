@@ -1,0 +1,31 @@
+#!/usr/bin/ruby
+#
+
+box1 = Array.new
+box2 = Array.new
+f = (ARGV[0] ? File.open(ARGV[0]) : STDIN)
+map = { "<" => box1,
+        ">" => box2 }
+
+class Bitbucket
+  def initialize
+  end
+  def push something
+  end
+end
+
+bucket = Bitbucket.new
+
+while buff = f.gets
+  buffarr = buff.split(/\s/)
+  box = map.fetch(buffarr[0]) { bucket }
+  box.push buffarr[3] unless buffarr[3].nil?
+end
+
+box1.sort!
+box2.sort!
+
+puts "\n\nBox1 uniques: "
+(box1 - box2).each {|x| puts x}
+puts "\n\nBox2 uniques: "
+(box2 - box1).each {|x| puts x}
